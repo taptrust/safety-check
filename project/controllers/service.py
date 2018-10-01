@@ -2,23 +2,27 @@
 from project import app
 from flask import jsonify, render_template, request
 import logging
-
-DEFAULT_ASYNC = False
+import threading
+import requests
 
 @app.route('/security', methods=['POST', 'GET'])
 def security():
     logging.info('/security')
     origin = request.remote_addr
     logging.info('Analysis job requested from {}'.format(origin))
-    if request.args.get('async', DEFAULT_ASYNC):
-        pass # not implemented at this time. Requires callback URL
+    analyzer = SecurityAnalyzer()
+    if request.args.get('callback_url'):
+        # Async. Start analysis in new thread.
+        thread = threading.Thread(target=analyzer.analyze_bytecode,
+            args=(blob_id, request.args))
+        thread.start()
+        return 'success', 200
     else:
-
-        analyzer = SecurityAnalyzer()
+        # Synchronous
         response = {
-            'analysis': analyzer.analyze_bytecode(request.args.get('bytecode'))
+            'analysis': analyzer.analyze_bytecode(request.args.get('bytecode'), request.args)
         }
-        return jsonify(response)
+        return jsonify(response), 200
 
 
 class SecurityAnalyzer(object):
@@ -26,13 +30,21 @@ class SecurityAnalyzer(object):
     def __init__(self, *args, **kwargs):
         pass
 
-    def analyze_bytecode(self, bytecode):
+    def analyze_bytecode(self, bytecode, args):
         analysis = {
             'mythril': self._mythril(bytecode)
         }
-        return analysis
+        if args.get('callback_url'):
+            # return callback via HTTP request
+            # TODO - use some form of auth token etc.
+            logging.info('posting analysis result to callback_url')
+            requests.post(args.get('callback_url'), json=jsonify(analysis))
+        else:
+            logging.info('no callback_url specified. Returning analysis')
+            return analysis
 
     def _mythril(self, bytecode):
+        logging.info('starting mythril analysis')
         max_depth = 12
         """
         TODO:
