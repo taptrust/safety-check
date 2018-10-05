@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from project import app
-from flask import jsonify, render_template, request
+from flask import jsonify, request
 import logging
 import threading
 import requests

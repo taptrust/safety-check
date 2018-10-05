@@ -1,8 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+from flask import render_template
 from project import app
 import logging
+
+
+@app.route('/')
+def root():
+    """Serve the home page of the web app."""
+    return render_template('landing_page.html')
+
 
 if __name__ == '__main__':
 
