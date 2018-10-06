@@ -9,23 +9,35 @@ bytecode_with_issues = '6060604052341561000c57fe5b5b6102f98061001c6000396000f300
 class MythrilTests(unittest.TestCase):
     def test_firing_lasers_using_bytecodes(self):
         payload = {
+            'module': 'controllers',
+            'file': 'service',
+            'method': 'security'
+        }
+
+        data = {
             'bytecode': bytecode_with_no_issues
         }
-        response = requests.get('%s/security' % self.base_uri,
-                                params=payload)
+        response = requests.post('%s/ajax' % self.base_uri,
+                                 params=payload, json=data)
         content = json.loads(response.content)
-        issues_list = json.loads(content['analysis']['mythril']['results'])
-        self.assertEqual(issues_list['issues'], [])
+        message = content['data']
+        self.assertEqual(message, 'The analysis was completed successfully. No issues were detected.\n')
 
     def test_firing_lasers_has_issues(self):
         payload = {
+            'module': 'controllers',
+            'file': 'service',
+            'method': 'security',
+        }
+
+        data = {
             'bytecode': bytecode_with_issues
         }
-        response = requests.get('%s/security' % self.base_uri,
-                                params=payload)
+        response = requests.post('%s/ajax' % self.base_uri,
+                                 params=payload, json=data)
         content = json.loads(response.content)
-        issues_list = json.loads(content['analysis']['mythril']['results'])
-        self.assertEqual(not not issues_list['issues'], not [])
+        message = content['data']
+        self.assertNotEqual(message, 'The analysis was completed successfully. No issues were detected.')
 
 
 class MythrilIntegrationTests(MythrilTests):

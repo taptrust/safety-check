@@ -2,15 +2,16 @@ body {
     font-family: "Open Sans", sans-serif;*;
     font-weight: 400;
     background-color: #f1f1ea;
-    padding:1em;
+    padding:2em;
+}
+
+textarea {
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .s-m-t-2 {
     margin-top: 10px !important;
-}
-
-.s-m-t-5 {
-    margin-top: 25px !important;
 }
 
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
