@@ -15,6 +15,12 @@ Dependencies :
 	cd safety-check
 	sudo pip3 install -r requirements.txt
 
+
+If on production, set the port to 80:
+
+    export PORT=80
+    
+    
 To run:
 
-    sudo python3 runserver.py
+    sudo - E python3 runserver.py
