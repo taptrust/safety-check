@@ -6,7 +6,6 @@ Dependencies :
 
 	git clone git@github.com:taptrust/safety-check.git
 	cd safety-check
-    	pip3 uninstall -r requirements.txt
 	pip3 install -r requirements.txt
 
 To run:
