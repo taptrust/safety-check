@@ -5,8 +5,8 @@ API to perform security and compliance analysis on smart contracts.
 Dependencies :
 
 	git clone git@github.com:taptrust/safety-check.git
-	cd analysis-service
-    	if you have old version of project: pip3 uninstall -r requirements.txt
+	cd safety-check
+    	pip3 uninstall -r requirements.txt
 	pip3 install -r requirements.txt
 
 To run:
