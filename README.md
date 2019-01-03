@@ -24,3 +24,5 @@ If on production, set the port to 80:
 To run:
 
     sudo - E python3 runserver.py
+    
+On production, use `screen` to keep the server running after the SSH session is closed. 
